@@ -247,7 +247,66 @@ SELECT * FROM learning_records;
 \q
 ```
 
-## 🔧 開発コマンド
+## 🔧 開発環境
+
+### 開発環境のセットアップと起動/停止
+
+開発時は **Docker（バックエンド + DB）** と **Vite開発サーバー（フロントエンド）** を別々に起動します。
+
+#### 1. バックエンド + データベースの起動
+
+**注意**: プロジェクトルート (`learning-app/`) で実行してください。
+
+```bash
+# 現在のディレクトリ: learning-app/
+
+# Docker Compose起動（バックエンド + PostgreSQL）
+docker compose up -d
+
+# 起動確認
+docker compose ps
+```
+
+バックエンドAPIは `http://localhost:8080` で起動します（通常は直接アクセスしません）。
+
+#### 2. フロントエンド開発サーバーの起動
+
+```bash
+# 現在のディレクトリ: learning-app/
+
+# frontendディレクトリに移動
+cd frontend
+
+# 依存関係インストール（初回のみ）
+npm install
+
+# 開発サーバー起動
+npm run dev
+```
+
+フロントエンドは `http://localhost:5173` で起動します。
+APIリクエストは自動的に `http://localhost:8080` にプロキシされます。
+
+#### 3. 開発サーバーの停止
+
+**フロントエンド開発サーバーの停止**:
+```bash
+# ターミナルで Ctrl+C を押す
+
+# プロジェクトルートに戻る
+cd ..
+```
+
+**バックエンド + データベースの停止**:
+```bash
+# 現在のディレクトリ: learning-app/
+
+# Docker Compose停止
+docker compose down
+
+# データベースデータも削除する場合
+docker compose down -v
+```
 
 ### Docker Compose 操作
 
@@ -338,7 +397,7 @@ cd frontend
 
 # 現在のディレクトリ: learning-app/frontend/
 
-# 依存関係インストール
+# 依存関係インストール（初回のみ）
 # 現在のディレクトリ: learning-app/frontend/
 npm install
 
@@ -356,6 +415,11 @@ npm run preview
 ```
 
 開発サーバーは通常 `http://localhost:5173` で起動します。
+
+**開発サーバーの停止**:
+```bash
+# ターミナルで Ctrl+C を押す
+```
 
 **終了したらプロジェクトルートに戻る**:
 ```bash
