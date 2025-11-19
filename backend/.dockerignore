@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+.env.local
+node_modules
+vendor
+.vscode
+.idea
+*.swp
+*.log
+dist
+build

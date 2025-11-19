@@ -1,0 +1,51 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+
+# Logs
+*.log
+logs/
+
+# Docker
+.docker
+
+# Go
+*.o
+*.a
+*.so
+bin/
+
+# Frontend
+frontend/dist/
+frontend/node_modules/
+
+# Backend
+backend/vendor/
+
+# Database
+postgres_data/
+
+IMPLEMENTATION_LOG.md
+
+SPEC.md
