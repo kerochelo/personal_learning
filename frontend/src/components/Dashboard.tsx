@@ -63,71 +63,50 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">📚 学習記録AI</h1>
-        <p className="text-gray-600 mb-6">
-          あなたの学習をスマートに追跡・分析します
-        </p>
+    <div className="bg-gray-100 p-8">
+      <div className="max-w-6xl mx-auto">
 
-        {/* 入力フォーム */}
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-6 rounded-lg shadow-lg mb-6"
-        >
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            今日の学習を記録
-          </label>
-          <textarea
-            value={recordText}
-            onChange={(e) => setRecordText(e.target.value)}
-            placeholder="例: 英語を60分学習、新しい単語を120個覚えた"
-            className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500"
-            rows={4}
-            disabled={loading}
-          />
-          <button
-            type="submit"
-            disabled={loading || !recordText.trim()}
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-400 transition"
-          >
-            {loading ? '分析中...' : '記録を送信'}
-          </button>
-        </form>
-
-        {/* 週次分析 */}
+        {/* Stats Cards */}
         {weeklyAnalysis && (
-          <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              📊 先週の分析
-            </h2>
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div className="bg-blue-50 p-4 rounded">
-                <p className="text-sm text-gray-600">継続率</p>
-                <p className="text-2xl font-bold text-blue-600">
-                  {weeklyAnalysis.continuation_rate}%
-                </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white p-6 rounded-xl border border-gray-200 hover:border-cyan-500 transition-all hover:shadow-lg">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center shadow-md">
+                  <span className="text-2xl">📈</span>
+                </div>
               </div>
-              <div className="bg-green-50 p-4 rounded">
-                <p className="text-sm text-gray-600">総学習時間</p>
-                <p className="text-2xl font-bold text-green-600">
-                  {weeklyAnalysis.total_study_time}分
-                </p>
+              <p className="text-sm text-gray-600 mb-1">継続率</p>
+              <p className="text-3xl font-bold text-gray-900">
+                {weeklyAnalysis.continuation_rate}%
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl border border-gray-200 hover:border-blue-500 transition-all hover:shadow-lg">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+                  <span className="text-2xl">⏱️</span>
+                </div>
               </div>
+              <p className="text-sm text-gray-600 mb-1">総学習時間</p>
+              <p className="text-3xl font-bold text-gray-900">
+                {weeklyAnalysis.total_study_time}分
+              </p>
             </div>
-            <div className="p-4 bg-yellow-50 rounded mb-4">
-              <p className="text-sm font-medium text-gray-700">💡 提案</p>
-              <p className="text-gray-700">{weeklyAnalysis.suggestions}</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <p className="text-sm text-gray-600">リスク:</p>
+
+            <div className="bg-white p-6 rounded-xl border border-gray-200 hover:border-green-500 transition-all hover:shadow-lg">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-md">
+                  <span className="text-2xl">🎯</span>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mb-1">リスクレベル</p>
               <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
                   weeklyAnalysis.risk_level === 'high'
-                    ? 'bg-red-100 text-red-700'
+                    ? 'bg-red-100 text-red-700 border border-red-200'
                     : weeklyAnalysis.risk_level === 'medium'
-                    ? 'bg-yellow-100 text-yellow-700'
-                    : 'bg-green-100 text-green-700'
+                    ? 'bg-yellow-100 text-yellow-700 border border-yellow-200'
+                    : 'bg-green-100 text-green-700 border border-green-200'
                 }`}
               >
                 {weeklyAnalysis.risk_level}
@@ -136,33 +115,121 @@ export const Dashboard = () => {
           </div>
         )}
 
-        {/* 記録一覧 */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            📝 記録一覧
-          </h2>
-          <div className="space-y-4">
+        {/* Input Form */}
+        <div className="bg-white p-6 rounded-xl border border-gray-200 mb-8 shadow-sm">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">新しい記録を追加</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                学習内容
+              </label>
+              <textarea
+                value={recordText}
+                onChange={(e) => setRecordText(e.target.value)}
+                placeholder="例: 英語を60分学習、新しい単語を120個覚えた"
+                className="w-full p-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"
+                rows={4}
+                disabled={loading}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading || !recordText.trim()}
+              className="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg hover:shadow-lg hover:shadow-cyan-500/30 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all"
+            >
+              {loading ? '分析中...' : '記録を追加'}
+            </button>
+          </form>
+        </div>
+
+        {/* AI Suggestions */}
+        {weeklyAnalysis && (
+          <div className="bg-white p-6 rounded-xl border border-gray-200 mb-8 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-2xl">💡</span>
+              <h2 className="text-xl font-semibold text-gray-900">AI提案</h2>
+            </div>
+            <p className="text-gray-700 leading-relaxed">
+              {weeklyAnalysis.suggestions}
+            </p>
+          </div>
+        )}
+
+        {/* Records Table */}
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900">最近の記録</h2>
+          </div>
+          <div className="overflow-x-auto">
             {records.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">
-                まだ記録がありません。さっそく記録を追加しましょう！
-              </p>
-            ) : (
-              records.map((record) => (
-                <div
-                  key={record.id}
-                  className="border-l-4 border-blue-500 pl-4 py-2"
-                >
-                  <p className="text-gray-600 text-sm">
-                    {new Date(record.created_at).toLocaleString('ja-JP')}
-                  </p>
-                  <p className="text-gray-800 font-medium">{record.topic}</p>
-                  <div className="flex gap-4 mt-2 text-sm text-gray-600">
-                    <span>⏱️ {record.study_time}分</span>
-                    <span>😊 {record.mood}/10</span>
-                    <span>⭐ {record.quality}</span>
-                  </div>
+              <div className="p-12 text-center">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-3xl">📝</span>
                 </div>
-              ))
+                <p className="text-gray-600 mb-2">まだ記録がありません</p>
+                <p className="text-sm text-gray-500">
+                  上のフォームから最初の記録を追加しましょう
+                </p>
+              </div>
+            ) : (
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                      日時
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                      トピック
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                      学習時間
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                      気分
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                      品質
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {records.map((record) => (
+                    <tr key={record.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        {new Date(record.created_at).toLocaleString('ja-JP', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900 font-medium">
+                        {record.topic}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {record.study_time}分
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {record.mood}/10
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 py-1 text-xs font-medium rounded-full ${
+                            record.quality === 'high'
+                              ? 'bg-green-100 text-green-700 border border-green-200'
+                              : record.quality === 'medium'
+                              ? 'bg-yellow-100 text-yellow-700 border border-yellow-200'
+                              : 'bg-gray-100 text-gray-700 border border-gray-200'
+                          }`}
+                        >
+                          {record.quality}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
           </div>
         </div>

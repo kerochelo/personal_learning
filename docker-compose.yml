@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Go バックエンド + React フロント統合アプリ
+  app:
+    build: .
+    container_name: learning-app
+    ports:
+      - "3000:8080"
+    environment:
+      PORT: 8080
+      ENVIRONMENT: development
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: learning
+      DB_SSLMODE: disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - learning-network
+    command: /app/server
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL データベース
+  postgres:
+    image: postgres:18.1-alpine
+    container_name: learning-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: learning
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - learning-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  learning-network:
+    driver: bridge

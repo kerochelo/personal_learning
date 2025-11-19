@@ -1,0 +1,43 @@
+# Git
+.git
+.gitignore
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+
+# Logs
+*.log
+logs/
+
+# Docker
+.docker
+
+# Documentation
+README.md
+SPEC.md
+IMPLEMENTATION_LOG.md
+
+# Database
+postgres_data/

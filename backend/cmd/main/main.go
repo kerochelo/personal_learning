@@ -50,8 +50,29 @@ func main() {
 	h.Register(e)
 
 	// 静的ファイル配信（フロントビルド済み）
-	e.Static("/", "frontend/dist")
-	e.File("/*", "frontend/dist/index.html")
+	// assetsフォルダ内の静的ファイル（JS/CSS）を優先配信
+	e.Static("/assets", "frontend/dist/assets")
+
+	// SPAフォールバック: APIルート以外のすべてをindex.htmlに
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			path := c.Request().URL.Path
+			// APIルートはスキップ
+			if len(path) >= 4 && path[:4] == "/api" {
+				return next(c)
+			}
+			// /healthはスキップ
+			if path == "/health" {
+				return next(c)
+			}
+			// 静的ファイル（/assetsで始まる）はスキップ
+			if len(path) >= 7 && path[:7] == "/assets" {
+				return next(c)
+			}
+			// それ以外はindex.htmlを返す
+			return c.File("frontend/dist/index.html")
+		}
+	})
 
 	// サーバー起動
 	port := cfg.Port
